@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<form action="#" id="login-form">
+    Username: <input type="text" id="login-username"> <br>
+    Password: <input type="password" id="login-password"> <br>
+    <button id="login-submit">Submit</button>
+</form>
+
+<div>
+    <h3>Tokens</h3>
+    <div id="tokens">
+        Access: <span id="access-token"></span> <br> <br>
+        Refresh: <span id="refresh-token"></span>
+    </div>
+</div>
+
+<script>
+    const instance = axios.create({
+  baseURL: 'http://localhost:8000/',
+  timeout: 1000,
+  headers: {'X-Custom-Header': 'foobar'}
+});
+
+    const submit_button = document.getElementById('login-submit')
+    submit_button.onclick = ()=> {
+        instance.post('/auth/token/', {
+            'username':document.getElementById('login-username').value,
+            'password': document.getElementById('login-password').value
+        }).then(res=> {
+            console.log(res)
+            document.getElementById('access-token').innerText = res.data.access;
+            document.getElementById('refresh-token').innerText = res.data.refresh;
+
+        })
+    }
+</script>
+</body>
+</html>
